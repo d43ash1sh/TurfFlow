@@ -1,0 +1,194 @@
+.my-turfs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.my-turfs-card {
+  background: var(--surface-container-lowest);
+  border-radius: var(--rounded-2xl);
+  overflow: hidden;
+  border: 1px solid var(--surface-container-high);
+  transition: transform 0.2s;
+}
+
+.my-turfs-card:hover { transform: translateY(-2px); }
+
+.my-turfs-card__image-wrap {
+  position: relative;
+  height: 180px;
+}
+
+.my-turfs-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.my-turfs-card__sport {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,110,47,0.85);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+  font-size: 10px;
+}
+
+.my-turfs-card__actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.my-turfs-card__action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--rounded-default);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: all 0.2s;
+}
+
+.my-turfs-card__action-btn--edit {
+  background: rgba(255,255,255,0.85);
+  color: var(--secondary);
+}
+
+.my-turfs-card__action-btn--delete {
+  background: rgba(255,255,255,0.85);
+  color: var(--error);
+}
+
+.my-turfs-card__action-btn:hover { transform: scale(1.1); }
+
+.my-turfs-card__body {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.my-turfs-card__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-turfs-card__header-row h3 { margin: 0; font-size: 17px; }
+
+.my-turfs-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.my-turfs-card__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--on-surface-variant);
+}
+
+.my-turfs-card__stats {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--outline-variant);
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.my-turfs-card__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  text-align: center;
+}
+
+.my-turfs-card__stat .label-bold { color: var(--on-surface-variant); }
+.my-turfs-card__stat strong { font-size: 15px; }
+
+.my-turfs-card__amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.my-turfs-card__amenity {
+  padding: 3px 10px;
+  background: var(--surface-container);
+  border-radius: var(--rounded-full);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+
+.my-turfs-card__slots-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: 10px;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--rounded-lg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.my-turfs-card__slots-btn:hover {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border-color: var(--secondary-container);
+}
+
+.my-turfs-add-card {
+  background: var(--surface-container-lowest);
+  border-radius: var(--rounded-2xl);
+  border: 2px dashed var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl);
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.my-turfs-add-card:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(0,110,47,0.03);
+}
+
+.my-turfs-add-card span {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.my-turfs-add-card p {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+}

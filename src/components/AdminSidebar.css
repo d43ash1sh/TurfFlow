@@ -1,0 +1,113 @@
+.admin-sidebar {
+  width: 240px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+  border-right: 0.5px solid var(--outline-variant);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(243, 252, 239, 0.85);
+}
+
+.admin-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.admin-sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.admin-sidebar__logo-icon {
+  font-size: 24px;
+}
+
+.admin-sidebar__logo-text {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.admin-sidebar__back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  padding: 6px;
+  border-radius: var(--rounded-default);
+  transition: all 0.2s;
+}
+
+.admin-sidebar__back:hover {
+  background: var(--surface-container);
+  color: var(--primary);
+}
+
+.admin-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.admin-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 12px var(--spacing-md);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  border-radius: var(--rounded-lg);
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.admin-sidebar__item:hover {
+  background: var(--surface-container);
+  color: var(--secondary);
+}
+
+.admin-sidebar__item--active {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  font-weight: 600;
+}
+
+.admin-sidebar__logout {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: 12px var(--spacing-md);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--error);
+  border-radius: var(--rounded-lg);
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: var(--spacing-lg);
+}
+
+.admin-sidebar__logout:hover {
+  background: var(--error-container);
+}
