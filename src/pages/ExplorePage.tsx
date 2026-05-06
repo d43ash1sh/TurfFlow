@@ -7,81 +7,64 @@ import { turfs, sports } from '../data/mockData';
 import './ExplorePage.css';
 
 export default function ExplorePage() {
-  const [query, setQuery] = useState('');
   const [activeSport, setActiveSport] = useState('All');
   const [showFilter, setShowFilter] = useState(false);
-  const [maxPrice, setMaxPrice] = useState(1500);
+  const [maxPrice, setMaxPrice] = useState(2000);
 
   const filtered = turfs.filter(t => {
     const matchSport = activeSport === 'All' || t.sport === activeSport;
-    const matchQuery = t.name.toLowerCase().includes(query.toLowerCase()) ||
-      t.location.toLowerCase().includes(query.toLowerCase());
-    const matchPrice = t.price <= maxPrice;
-    return matchSport && matchQuery && matchPrice;
+    const matchPrice = t.basePrice <= maxPrice;
+    return matchSport && matchPrice;
   });
 
   return (
     <div className="page-wrapper explore-page">
-      {/* Sticky top bar */}
-      <header className="explore-header glass-panel">
-        <div className="explore-search-wrap">
-          <Search size={17} className="explore-search-icon" />
-          <input
-            id="explore-search-input"
-            className="explore-search-input"
-            type="text"
-            placeholder="Search turfs, areas..."
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            autoFocus
-          />
-          {query && (
-            <button className="explore-search-clear" onClick={() => setQuery('')}>
-              <X size={15} />
-            </button>
-          )}
+      {/* Premium Category Header */}
+      <header className="explore-premium-header">
+        <div className="explore-header-top">
+          <h1 className="explore-title">Explore <span>Categories</span></h1>
+          <button id="explore-filter-btn" className={`explore-filter-btn ${showFilter ? 'explore-filter-btn--active' : ''}`} onClick={() => setShowFilter(!showFilter)}>
+            <SlidersHorizontal size={18} />
+          </button>
         </div>
-        <button id="explore-filter-btn" className={`explore-filter-btn ${showFilter ? 'explore-filter-btn--active' : ''}`} onClick={() => setShowFilter(!showFilter)}>
-          <SlidersHorizontal size={17} />
-        </button>
+        
+        <div className="category-navigation">
+          {sports.map(sport => (
+            <button
+              key={sport}
+              id={`explore-sport-${sport.toLowerCase()}`}
+              className={`category-chip ${activeSport === sport ? 'category-chip--active' : ''}`}
+              onClick={() => setActiveSport(sport)}
+            >
+              <span className="category-icon">{sport === 'Football' ? '⚽' : sport === 'Cricket' ? '🏏' : sport === 'Badminton' ? '🏸' : sport === 'Basketball' ? '🏀' : sport === 'Tennis' ? '🎾' : '🎯'}</span>
+              <span className="category-name">{sport}</span>
+            </button>
+          ))}
+        </div>
       </header>
 
       {/* Filter Panel */}
       {showFilter && (
-        <div className="explore-filter-panel">
-          <div className="explore-filter-row">
-            <span className="label-bold">Max Price: ₹{maxPrice}/hr</span>
-            <input
-              id="explore-price-range"
-              type="range" min={300} max={1500} step={50}
-              value={maxPrice}
-              onChange={e => setMaxPrice(Number(e.target.value))}
-              className="explore-range"
-            />
+        <div className="explore-filter-panel glass-panel">
+          <div className="filter-header">
+            <span className="label-bold">Budget (Max: ₹{maxPrice})</span>
+            <button className="filter-reset" onClick={() => setMaxPrice(2000)}>Reset</button>
           </div>
+          <input
+            id="explore-price-range"
+            type="range" min={300} max={2000} step={50}
+            value={maxPrice}
+            onChange={e => setMaxPrice(Number(e.target.value))}
+            className="explore-range"
+          />
         </div>
       )}
-
-      {/* Sports Chips */}
-      <div className="explore-sports-row">
-        {sports.map(sport => (
-          <button
-            key={sport}
-            id={`explore-sport-${sport.toLowerCase()}`}
-            className={`sport-chip ${activeSport === sport ? 'sport-chip--active' : ''}`}
-            onClick={() => setActiveSport(sport)}
-          >
-            {sport === 'Football' ? '⚽' : sport === 'Cricket' ? '🏏' : sport === 'Badminton' ? '🏸' : sport === 'Basketball' ? '🏀' : sport === 'Tennis' ? '🎾' : '🔍'} {sport}
-          </button>
-        ))}
-      </div>
 
       <div className="explore-content">
         {/* Results count */}
         <p className="explore-count">
           <span className="label-bold">{filtered.length} turfs</span> found
           {activeSport !== 'All' && ` for ${activeSport}`}
-          {query && ` matching "${query}"`}
         </p>
 
         {filtered.length === 0 ? (

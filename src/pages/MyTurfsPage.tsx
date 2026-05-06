@@ -44,7 +44,7 @@ export default function MyTurfsPage() {
                 <div className="my-turfs-card__stats">
                   <div className="my-turfs-card__stat">
                     <span className="label-bold">Rate</span>
-                    <strong>₹{turf.price}/hr</strong>
+                    <strong>₹{turf.basePrice}/hr</strong>
                   </div>
                   <div className="my-turfs-card__stat">
                     <span className="label-bold">Reviews</span>

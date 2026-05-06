@@ -14,21 +14,26 @@ export default function BottomNav() {
   const location = useLocation();
 
   return (
-    <nav className="bottom-nav glass-panel">
-      {navItems.map(({ icon: Icon, label, path }) => {
-        const isActive = location.pathname === path;
-        return (
-          <button
-            key={path}
-            id={`nav-${label.toLowerCase()}`}
-            className={`bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`}
-            onClick={() => navigate(path)}
-          >
-            <Icon size={22} />
-            <span>{label}</span>
-          </button>
-        );
-      })}
+    <nav className="bottom-nav">
+      <div className="bottom-nav__container shadow-lg">
+        {navItems.map(({ icon: Icon, label, path }) => {
+          const isActive = location.pathname === path;
+          return (
+            <button
+              key={path}
+              id={`nav-${label.toLowerCase()}`}
+              className={`bottom-nav__item ${isActive ? 'bottom-nav__item--active' : ''}`}
+              onClick={() => navigate(path)}
+            >
+              <div className="nav-icon-wrapper">
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+              <span className="nav-label">{label}</span>
+              {isActive && <div className="nav-active-dot" />}
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 }

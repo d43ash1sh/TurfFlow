@@ -82,7 +82,7 @@ export default function OwnerDashboard() {
                   <div className="owner-turf-info">
                     <strong>{turf.name}</strong>
                     <span><MapPin size={11}/>{turf.location}</span>
-                    <span>₹{turf.price}/hr · ⭐{turf.rating}</span>
+                    <span>₹{turf.basePrice}/hr · ⭐{turf.rating}</span>
                   </div>
                   <button className="owner-turf-menu"><MoreVertical size={16} /></button>
                 </div>
@@ -101,7 +101,7 @@ export default function OwnerDashboard() {
                 <div key={b.id} className="owner-booking-row" id={`owner-booking-${b.id}`}>
                   <div className="owner-booking-info">
                     <strong>{b.turfName}</strong>
-                    <span>{new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · {b.slots[0]}</span>
+                    <span>{new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · {b.startTime}</span>
                   </div>
                   <div className="owner-booking-right">
                     <span className={`my-bookings__status status--${b.status}`}>{b.status}</span>

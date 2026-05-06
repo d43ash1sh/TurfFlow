@@ -81,7 +81,7 @@ export default function AdminControlPanel() {
                         </div>
                       </td>
                       <td>{turf.sport}</td>
-                      <td>₹{turf.price}/hr</td>
+                      <td>₹{turf.basePrice}/hr</td>
                       <td>⭐ {turf.rating}</td>
                       <td><span className="my-bookings__status status--upcoming">Active</span></td>
                     </tr>

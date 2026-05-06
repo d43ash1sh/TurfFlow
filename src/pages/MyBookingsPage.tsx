@@ -45,7 +45,7 @@ export default function MyBookingsPage() {
                   <span className="my-bookings__location"><MapPin size={12}/>{booking.location}</span>
                   <div className="my-bookings__meta">
                     <span><Calendar size={12}/>{new Date(booking.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                    <span><Clock size={12}/>{booking.slots.join(', ')}</span>
+                    <span><Clock size={12}/>{booking.startTime} → {booking.endTime} · {booking.duration}hr</span>
                   </div>
                   <div className="my-bookings__footer">
                     <span className="my-bookings__amount">₹{booking.totalAmount.toLocaleString()}</span>

@@ -42,7 +42,7 @@ export default function TurfCard({ turf, userLocation, isNearest }: TurfCardProp
           </span>
         </div>
         <div className="turf-card__footer">
-          <span className="turf-card__price">₹{turf.price}<span>/hr</span></span>
+          <span className="turf-card__price">₹{turf.basePrice}<span>/hr</span></span>
           <button className="turf-card__btn" onClick={e => { e.stopPropagation(); navigate(`/turf/${turf.id}`); }}>Book Now</button>
         </div>
       </div>

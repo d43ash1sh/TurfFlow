@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Bell, ChevronRight, Navigation, RefreshCcw } from 'lucide-react';
+import { Search, MapPin, Bell, ChevronRight, Navigation, RefreshCcw, X } from 'lucide-react';
 import { useGreeting } from '../hooks/useGreeting';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { calculateDistance } from '../utils/distance';
@@ -13,14 +13,23 @@ import './HomePage.css';
 export default function HomePage() {
   const navigate = useNavigate();
   const [activeSport, setActiveSport] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const greeting = useGreeting();
   const { location, city, loading: locLoading, error: locError, requestLocation } = useGeolocation();
 
-  const sortedTurfs = useMemo(() => {
+  const filteredTurfs = useMemo(() => {
     let list = [...turfs];
     
-    // Filter by sport
-    if (activeSport !== 'All') {
+    // Filter by search query (Global search)
+    if (searchQuery) {
+      list = list.filter(t => 
+        t.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.sport.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    } else if (activeSport !== 'All') {
+      // Only filter by sport if NOT searching
       list = list.filter(t => t.sport === activeSport);
     }
 
@@ -34,85 +43,85 @@ export default function HomePage() {
     }
     
     return list;
-  }, [activeSport, location]);
+  }, [activeSport, searchQuery, location]);
 
-  const nearestTurfId = location && sortedTurfs.length > 0 ? sortedTurfs[0].id : null;
+  const nearestTurfId = location && filteredTurfs.length > 0 ? filteredTurfs[0].id : null;
 
   return (
     <div className="page-wrapper home-page">
-      {/* Header */}
-      <header className="home-header glass-panel">
-        <div className="home-header__left">
-          <div className="home-header__greeting">
-            <p className="label-bold" style={{ color: 'var(--primary)' }}>{greeting}</p>
-          </div>
-          <div className="home-header__location">
-            <MapPin size={13} className={locLoading ? 'pulse' : ''} />
-            <span>{locLoading ? 'Detecting location...' : (city || 'Guwahati, Assam')}</span>
+      {/* Premium Header */}
+      <header className="home-header">
+        <div className="home-header__brand">
+          <h1 className="brand-title">Turf<span>Flow</span></h1>
+          <div className="home-header__location" onClick={requestLocation}>
+            <MapPin size={12} className={locLoading ? 'pulse' : ''} />
+            <span>{locLoading ? 'Detecting...' : (city || 'Itanagar, Arunachal')}</span>
           </div>
         </div>
-        <button id="home-notification-btn" className="home-header__notif">
-          <Bell size={20} />
-          <span className="home-header__notif-badge" />
-        </button>
+        <div className="home-header__quote-container">
+          <p className="animated-quote">"Play with heart. Win with grace."</p>
+        </div>
       </header>
 
       <div className="home-content">
-        {/* Location Discovery Banner */}
-        {!location && (
-          <div className={`location-banner glass-panel ${locError ? 'location-banner--error' : ''}`}>
-            <div className="location-banner__icon">
-              <Navigation size={20} className={locLoading ? 'pulse' : ''} />
-            </div>
-            <div className="location-banner__text">
-              <h4>{locError ? 'Location Error' : 'Find Nearby Turfs'}</h4>
-              <p>{locError || 'Allow location access to see the closest turfs around you.'}</p>
-            </div>
-            <button 
-              className="location-banner__btn" 
-              onClick={requestLocation}
-              disabled={locLoading}
-            >
-              {locLoading ? <RefreshCcw size={16} className="spin" /> : locError ? 'Retry' : 'Enable'}
-            </button>
+        {/* Search Bar - Inline Filtering */}
+        <div className="home-search-container">
+          <div className="home-search-bar shadow-sm">
+            <Search size={18} className="search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search by location or name..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+            {searchQuery && (
+              <button className="search-clear-btn" onClick={() => setSearchQuery('')}>
+                <X size={16} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Dynamic Content: Hide Hero/Sports when searching for better focus */}
+        {!searchQuery ? (
+          <>
+            <Hero />
+
+            {/* Sports Filter */}
+            <section className="home-section">
+              <div className="home-section__header">
+                <h2>Popular Sports</h2>
+              </div>
+              <div className="sport-chips">
+                {sports.map(sport => (
+                  <button
+                    key={sport}
+                    id={`sport-chip-${sport.toLowerCase()}`}
+                    className={`sport-chip ${activeSport === sport ? 'sport-chip--active' : ''}`}
+                    onClick={() => setActiveSport(sport)}
+                  >
+                    {sport === 'Football' ? '⚽' : sport === 'Cricket' ? '🏏' : sport === 'Badminton' ? '🏸' : sport === 'Basketball' ? '🏀' : sport === 'Tennis' ? '🎾' : '🔍'} {sport}
+                  </button>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : (
+          <div className="search-results-meta">
+            <p className="results-count">Found <strong>{filteredTurfs.length}</strong> turfs matching your search</p>
           </div>
         )}
 
-        {/* Search Bar */}
-        <div className="home-search" onClick={() => navigate('/explore')} id="home-search-bar">
-          <Search size={18} className="home-search__icon" />
-          <span className="home-search__placeholder">Search turfs, locations...</span>
-        </div>
-
-        {/* Hero Banner */}
-        <Hero />
-
-        {/* Sports Filter */}
+        {/* Featured/Results Turfs */}
         <section className="home-section">
           <div className="home-section__header">
-            <h2>Popular Sports</h2>
-          </div>
-          <div className="sport-chips">
-            {sports.map(sport => (
-              <button
-                key={sport}
-                id={`sport-chip-${sport.toLowerCase()}`}
-                className={`sport-chip ${activeSport === sport ? 'sport-chip--active' : ''}`}
-                onClick={() => setActiveSport(sport)}
-              >
-                {sport === 'Football' ? '⚽' : sport === 'Cricket' ? '🏏' : sport === 'Badminton' ? '🏸' : sport === 'Basketball' ? '🏀' : sport === 'Tennis' ? '🎾' : '🔍'} {sport}
+            <h2>{searchQuery ? 'Search Results' : 'Featured Turfs'}</h2>
+            {!searchQuery && (
+              <button id="home-see-all-btn" className="home-see-all" onClick={() => navigate('/explore')}>
+                See All <ChevronRight size={14} />
               </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Featured Turfs */}
-        <section className="home-section">
-          <div className="home-section__header">
-            <h2>Featured Turfs</h2>
-            <button id="home-see-all-btn" className="home-see-all" onClick={() => navigate('/explore')}>
-              See All <ChevronRight size={14} />
-            </button>
+            )}
           </div>
           <div className="home-turfs-grid">
             {locLoading ? (
@@ -126,8 +135,8 @@ export default function HomePage() {
                   </div>
                 </div>
               ))
-            ) : sortedTurfs.length > 0 ? (
-              sortedTurfs.map(turf => (
+            ) : filteredTurfs.length > 0 ? (
+              filteredTurfs.map(turf => (
                 <TurfCard 
                   key={turf.id} 
                   turf={turf} 
@@ -136,9 +145,11 @@ export default function HomePage() {
                 />
               ))
             ) : (
-              <p style={{ color: 'var(--on-surface-variant)', gridColumn: '1/-1', textAlign: 'center', padding: '32px 0' }}>
-                No turfs found for {activeSport}. Try another sport.
-              </p>
+              <div className="no-results">
+                <span className="no-results-icon">🔍</span>
+                <p>No turfs found matching "{searchQuery}"</p>
+                <button className="clear-search-link" onClick={() => setSearchQuery('')}>Clear search</button>
+              </div>
             )}
           </div>
         </section>

@@ -3,21 +3,22 @@ export interface Turf {
   name: string;
   location: string;
   city: string;
-  price: number;
   rating: number;
   reviews: number;
   sport: string;
-  image: string;
+  image: string;      // main display image
+  images: string[];   // gallery images
   amenities: string[];
   description: string;
   ownerId: string;
   lat: number;
   lng: number;
+  basePrice: number;
+  extraHourPrice: number;
 }
 
 export interface TimeSlot {
-  id: string;
-  time: string;
+  time: string; // "10:00", "11:00"
   status: 'available' | 'booked' | 'selected';
 }
 
@@ -27,7 +28,9 @@ export interface Booking {
   turfName: string;
   location: string;
   date: string;
-  slots: string[];
+  startTime: string;
+  endTime: string;
+  duration: number;
   totalAmount: number;
   status: 'upcoming' | 'completed' | 'cancelled';
   sport: string;
@@ -48,125 +51,449 @@ export interface User {
 export const turfs: Turf[] = [
   {
     id: '1',
-    name: 'Goal Arena Turf',
-    location: 'Beltola, Guwahati',
-    city: 'Guwahati',
-    price: 800,
-    rating: 4.8,
-    reviews: 124,
+    name: 'Chumu Futsal Ground (CFG)',
+    location: 'Itanagar',
+    city: 'Itanagar',
+    basePrice: 1200,
+    extraHourPrice: 1000,
+    rating: 4.9,
+    reviews: 119,
     sport: 'Football',
     image: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop',
-    amenities: ['Changing Rooms', 'Parking', 'Floodlights', 'Drinking Water', 'First Aid'],
-    description: 'Premium synthetic turf ground with international standard FIFA-quality surface. Perfect for 5-a-side and 7-a-side football matches with full floodlighting for evening games.',
+    images: [
+      'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1431324155629-1a6eda1fedeb?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Parking', 'Floodlights', 'Drinking Water', 'Washroom'],
+    description: 'Best turf and available parking area. Open 24 hours for non-stop action.',
     ownerId: 'owner1',
-    lat: 26.1158,
-    lng: 91.7941,
+    lat: 27.0844,
+    lng: 93.6053,
   },
   {
     id: '2',
-    name: 'Shillong Elite Turf',
-    location: 'Laitumkhrah, Shillong',
-    city: 'Shillong',
-    price: 900,
-    rating: 4.6,
-    reviews: 89,
-    sport: 'Cricket',
-    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop',
-    amenities: ['Changing Rooms', 'Cafeteria', 'Parking', 'Floodlights'],
-    description: 'State-of-the-art cricket practice nets and open ground in the heart of Shillong. Ideal for batting and bowling practice sessions.',
+    name: "Baller's Arena Itanagar",
+    location: 'Opposite Mahindra Workshop',
+    city: 'Itanagar',
+    basePrice: 1000,
+    extraHourPrice: 800,
+    rating: 3.2,
+    reviews: 17,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1526189291168-581369fe24b1?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Parking', 'Maintenance Staff', 'Floodlights'],
+    description: 'Well equipped soccer field with regular maintenance of the pitch.',
     ownerId: 'owner2',
-    lat: 25.5714,
-    lng: 91.8948,
+    lat: 27.0912,
+    lng: 93.6120,
   },
   {
     id: '3',
-    name: 'Green Zone Sports Hub',
-    location: 'Zoo Road, Guwahati',
-    city: 'Guwahati',
-    price: 650,
-    rating: 4.5,
-    reviews: 67,
+    name: 'STRIKERS ARENA FUTSAL',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 1100,
+    extraHourPrice: 900,
+    rating: 4.6,
+    reviews: 11,
     sport: 'Football',
-    image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop',
-    amenities: ['Parking', 'Floodlights', 'Drinking Water'],
-    description: 'Budget-friendly turf facility with well-maintained artificial grass. Great for casual matches and weekend tournaments.',
+    image: 'https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1524015324113-ad2768567d02?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Parking', 'Vibe Zone', 'Floodlights'],
+    description: 'Great futsal quality and vibe.',
     ownerId: 'owner1',
-    lat: 26.1585,
-    lng: 91.7816,
+    lat: 27.1055,
+    lng: 93.6922,
   },
   {
     id: '4',
-    name: 'Thunder Badminton Court',
-    location: 'Six Mile, Guwahati',
-    city: 'Guwahati',
-    price: 400,
-    rating: 4.7,
-    reviews: 201,
+    name: 'EVENORI The Ground',
+    location: 'Jully Basti Rd',
+    city: 'Itanagar',
+    basePrice: 1300,
+    extraHourPrice: 1100,
+    rating: 4.1,
+    reviews: 84,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1526189291168-581369fe24b1?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Parking', 'Cafeteria', 'Floodlights'],
+    description: 'One of the best turf grounds in the capital.',
+    ownerId: 'owner3',
+    lat: 27.0722,
+    lng: 93.6215,
+  },
+  {
+    id: '5',
+    name: 'Més Que Football Arena',
+    location: 'Rooftop O.T. Building',
+    city: 'Itanagar',
+    basePrice: 1500,
+    extraHourPrice: 1200,
+    rating: 4.0,
+    reviews: 186,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1431324155629-1a6eda1fedeb?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1431324155629-1a6eda1fedeb?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Rooftop View', 'Parking', 'Floodlights'],
+    description: 'Nice ground with unique rooftop experience.',
+    ownerId: 'owner2',
+    lat: 27.1000,
+    lng: 93.6000,
+  },
+  {
+    id: '6',
+    name: 'JITO BADMINTON ARENA',
+    location: 'Chimpu',
+    city: 'Itanagar',
+    basePrice: 800,
+    extraHourPrice: 600,
+    rating: 3.5,
+    reviews: 53,
     sport: 'Badminton',
     image: 'https://images.unsplash.com/photo-1613918108466-292b78a8ef95?w=800&auto=format&fit=crop',
-    amenities: ['AC Hall', 'Changing Rooms', 'Parking', 'Pro Shop'],
-    description: 'Indoor air-conditioned badminton courts with professional wooden flooring. Suitable for both recreational and competitive play.',
+    images: [
+      'https://images.unsplash.com/photo-1613918108466-292b78a8ef95?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1626224580194-860c36f67554?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1621360341396-4190906757f1?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Indoor Court', 'Parking', 'Floodlights'],
+    description: 'Professional indoor badminton courts in Chimpu.',
     ownerId: 'owner3',
-    lat: 26.1306,
-    lng: 91.8152,
+    lat: 27.0500,
+    lng: 93.6000,
   },
-];
-
-export const timeSlots: TimeSlot[] = [
-  { id: 's1', time: '06:00 AM', status: 'booked' },
-  { id: 's2', time: '07:00 AM', status: 'booked' },
-  { id: 's3', time: '08:00 AM', status: 'available' },
-  { id: 's4', time: '09:00 AM', status: 'available' },
-  { id: 's5', time: '10:00 AM', status: 'available' },
-  { id: 's6', time: '11:00 AM', status: 'booked' },
-  { id: 's7', time: '12:00 PM', status: 'booked' },
-  { id: 's8', time: '01:00 PM', status: 'available' },
-  { id: 's9', time: '02:00 PM', status: 'available' },
-  { id: 's10', time: '03:00 PM', status: 'available' },
-  { id: 's11', time: '04:00 PM', status: 'booked' },
-  { id: 's12', time: '05:00 PM', status: 'booked' },
-  { id: 's13', time: '06:00 PM', status: 'available' },
-  { id: 's14', time: '07:00 PM', status: 'available' },
-  { id: 's15', time: '08:00 PM', status: 'available' },
-  { id: 's16', time: '09:00 PM', status: 'booked' },
+  {
+    id: '7',
+    name: 'Soku Basketball Court',
+    location: '6 Kilo',
+    city: 'Itanagar',
+    basePrice: 1100,
+    extraHourPrice: 900,
+    rating: 4.1,
+    reviews: 52,
+    sport: 'Basketball',
+    image: 'https://images.unsplash.com/photo-1544919396-d1306bc39971?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1544919396-d1306bc39971?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Professional Hoops', 'Parking', 'Washroom'],
+    description: 'High-quality basketball court with amazing views.',
+    ownerId: 'owner1',
+    lat: 27.0650,
+    lng: 93.6300,
+  },
+  {
+    id: '8',
+    name: 'TMT CRICKET ARENA',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 1400,
+    extraHourPrice: 1100,
+    rating: 4.3,
+    reviews: 60,
+    sport: 'Cricket',
+    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1593341646782-e0b495cff86d?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Bowling Machines', 'Nets', 'Parking'],
+    description: 'Premier cricket facility in Naharlagun for practice and matches.',
+    ownerId: 'owner2',
+    lat: 27.1100,
+    lng: 93.7000,
+  },
+  {
+    id: '9',
+    name: 'Aku amu Tennis Court',
+    location: 'Niya colony',
+    city: 'Itanagar',
+    basePrice: 900,
+    extraHourPrice: 700,
+    rating: 4.0,
+    reviews: 22,
+    sport: 'Tennis',
+    image: 'https://images.unsplash.com/photo-1595435064219-c80ce5444206?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1595435064219-c80ce5444206?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1554062614-6da4d67399b1?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Synthetic Court', 'Floodlights', 'Parking'],
+    description: 'Standard synthetic tennis court for singles and doubles.',
+    ownerId: 'owner3',
+    lat: 27.0800,
+    lng: 93.6400,
+  },
+  {
+    id: '10',
+    name: 'Anfield Football Ground',
+    location: 'Nirjuli',
+    city: 'Nirjuli',
+    basePrice: 1000,
+    extraHourPrice: 800,
+    rating: 4.2,
+    reviews: 71,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1526189291168-581369fe24b1?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1526189291168-581369fe24b1?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1524015324113-ad2768567d02?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Easily Accessible', 'Parking', 'Floodlights'],
+    description: 'Nice turf, medium size and easily accessible.',
+    ownerId: 'owner1',
+    lat: 27.1200,
+    lng: 93.7500,
+  },
+  {
+    id: '11',
+    name: 'G Tennis Arena',
+    location: 'Bage tinali',
+    city: 'Naharlagun',
+    basePrice: 1100,
+    extraHourPrice: 900,
+    rating: 4.1,
+    reviews: 25,
+    sport: 'Tennis',
+    image: 'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595435064219-c80ce5444206?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Pro Coaching', 'Parking', 'Floodlights'],
+    description: 'Best tennis court in the region with coaching facilities.',
+    ownerId: 'owner2',
+    lat: 27.1300,
+    lng: 93.7200,
+  },
+  {
+    id: '12',
+    name: 'Football A.S Arena',
+    location: 'Itanagar',
+    city: 'Itanagar',
+    basePrice: 1000,
+    extraHourPrice: 800,
+    rating: 4.3,
+    reviews: 26,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['High Quality Turf', 'Parking', 'Drinking Water'],
+    description: 'Best ground in my experience.',
+    ownerId: 'owner3',
+    lat: 27.0900,
+    lng: 93.6500,
+  },
+  {
+    id: '13',
+    name: 'Hornbill Basketball Club',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 1200,
+    extraHourPrice: 1000,
+    rating: 3.9,
+    reviews: 19,
+    sport: 'Basketball',
+    image: 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1544919396-d1306bc39971?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Roof Cover', 'Indoor Feel', 'Parking'],
+    description: 'Good indoor basketball court with roof.',
+    ownerId: 'owner1',
+    lat: 27.1400,
+    lng: 93.6800,
+  },
+  {
+    id: '14',
+    name: 'GJ FUTSAL ARENA',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 1100,
+    extraHourPrice: 900,
+    rating: 4.0,
+    reviews: 60,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1524015324113-ad2768567d02?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1524015324113-ad2768567d02?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Awesome Quality', 'Good Location', 'Floodlights'],
+    description: 'Loved it, turf quality is awesome.',
+    ownerId: 'owner2',
+    lat: 27.1000,
+    lng: 93.7100,
+  },
+  {
+    id: '15',
+    name: 'N.K VOLLEYBALL TURF',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 600,
+    extraHourPrice: 400,
+    rating: 4.2,
+    reviews: 12,
+    sport: 'Volleyball',
+    image: 'https://images.unsplash.com/photo-1592656670411-591e413fb315?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1592656670411-591e413fb315?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1579758629938-03607cc9ab95?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1544919396-d1306bc39971?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Volleyball Net', 'Parking', 'Floodlights'],
+    description: 'Freshly launched volleyball turf in Naharlagun.',
+    ownerId: 'owner3',
+    lat: 27.1150,
+    lng: 93.7300,
+  },
+  {
+    id: '16',
+    name: 'Cloud 9 Cricket Ground',
+    location: 'Lekhi',
+    city: 'Naharlagun',
+    basePrice: 1300,
+    extraHourPrice: 1100,
+    rating: 3.8,
+    reviews: 54,
+    sport: 'Cricket',
+    image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Pitch Covers', 'Parking', 'Washroom'],
+    description: 'Big cricket ground with multiple practice nets.',
+    ownerId: 'owner1',
+    lat: 27.1500,
+    lng: 93.7800,
+  },
+  {
+    id: '17',
+    name: 'Gecko Sports Hub',
+    location: 'Itanagar',
+    city: 'Itanagar',
+    basePrice: 1400,
+    extraHourPrice: 1200,
+    rating: 3.9,
+    reviews: 135,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1431324155629-1a6eda1fedeb?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1431324155629-1a6eda1fedeb?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Swimming Pool', 'Restaurant', 'Washroom'],
+    description: 'Complete sporting complex with futsal, swimming, and more.',
+    ownerId: 'owner2',
+    lat: 27.0850,
+    lng: 93.6200,
+  },
+  {
+    id: '18',
+    name: 'K.D Badminton Futsal',
+    location: 'Ganga',
+    city: 'Itanagar',
+    basePrice: 1000,
+    extraHourPrice: 800,
+    rating: 4.8,
+    reviews: 4,
+    sport: 'Badminton',
+    image: 'https://images.unsplash.com/photo-1626224580194-860c36f67554?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1626224580194-860c36f67554?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1613918108466-292b78a8ef95?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Sufficient Space', 'Parking', 'Floodlights'],
+    description: 'Very nice indoor badminton facility.',
+    ownerId: 'owner3',
+    lat: 27.0950,
+    lng: 93.6150,
+  },
+  {
+    id: '19',
+    name: 'T-Arena Volleyball Court',
+    location: '6 Kilo',
+    city: 'Itanagar',
+    basePrice: 700,
+    extraHourPrice: 500,
+    rating: 5.0,
+    reviews: 5,
+    sport: 'Volleyball',
+    image: 'https://images.unsplash.com/photo-1579758629938-03607cc9ab95?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1579758629938-03607cc9ab95?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1592656670411-591e413fb315?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Pro Net', 'Parking', 'Services'],
+    description: 'Top rated volleyball court in Itanagar.',
+    ownerId: 'owner1',
+    lat: 27.0680,
+    lng: 93.6320,
+  },
+  {
+    id: '20',
+    name: 'Mes Que Champions Arena',
+    location: 'Naharlagun',
+    city: 'Naharlagun',
+    basePrice: 1600,
+    extraHourPrice: 1300,
+    rating: 4.2,
+    reviews: 66,
+    sport: 'Football',
+    image: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&auto=format&fit=crop'
+    ],
+    amenities: ['Biggest Turf', 'Parking', 'Floodlights'],
+    description: 'Best & the biggest turf in the state.',
+    ownerId: 'owner2',
+    lat: 27.1250,
+    lng: 93.6950,
+  },
 ];
 
 export const bookings: Booking[] = [
   {
     id: 'b1',
     turfId: '1',
-    turfName: 'Goal Arena Turf',
-    location: 'Beltola, Guwahati',
+    turfName: 'Chumu Futsal Ground (CFG)',
+    location: 'Itanagar',
     date: '2026-05-10',
-    slots: ['06:00 PM', '07:00 PM'],
-    totalAmount: 1600,
+    startTime: '18:00',
+    endTime: '20:00',
+    duration: 2,
+    totalAmount: 2200,
     status: 'upcoming',
     sport: 'Football',
     image: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'b2',
-    turfId: '4',
-    turfName: 'Thunder Badminton Court',
-    location: 'Six Mile, Guwahati',
-    date: '2026-04-28',
-    slots: ['09:00 AM', '10:00 AM'],
-    totalAmount: 800,
-    status: 'completed',
-    sport: 'Badminton',
-    image: 'https://images.unsplash.com/photo-1613918108466-292b78a8ef95?w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'b3',
-    turfId: '2',
-    turfName: 'Shillong Elite Turf',
-    location: 'Laitumkhrah, Shillong',
-    date: '2026-04-20',
-    slots: ['03:00 PM'],
-    totalAmount: 900,
-    status: 'cancelled',
-    sport: 'Cricket',
-    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&auto=format&fit=crop',
   },
 ];
 
@@ -178,7 +505,7 @@ export const users: User[] = [
   { id: 'u5', name: 'Sanjay Kalita', email: 'sanjay@example.com', phone: '9876543214', role: 'owner', joinDate: '2025-12-20', status: 'active', bookings: 0 },
 ];
 
-export const ownerTurfs: Turf[] = [turfs[0], turfs[2]];
+export const ownerTurfs: Turf[] = [turfs[0], turfs[2], turfs[9]];
 
 export const earningsData = {
   totalEarnings: 124500,
@@ -196,4 +523,4 @@ export const earningsData = {
   ],
 };
 
-export const sports = ['All', 'Football', 'Cricket', 'Badminton', 'Basketball', 'Tennis'];
+export const sports = ['All', 'Football', 'Cricket', 'Badminton', 'Basketball', 'Tennis', 'Volleyball'];
