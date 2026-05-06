@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Star, Users, CalendarCheck, Plus, MoreVertical, MapPin } from 'lucide-react';
 import AdminSidebar from '../components/AdminSidebar';
+import { useGreeting } from '../hooks/useGreeting';
 import { ownerTurfs, bookings, earningsData } from '../data/mockData';
 import './OwnerDashboard.css';
 
 export default function OwnerDashboard() {
   const navigate = useNavigate();
+
+  const greeting = useGreeting();
 
   const stats = [
     { label: 'Total Earnings', value: `₹${(earningsData.totalEarnings / 1000).toFixed(1)}K`, icon: TrendingUp, color: 'var(--primary)' },
@@ -23,7 +26,7 @@ export default function OwnerDashboard() {
         <header className="owner-header">
           <div>
             <h1>Owner Dashboard</h1>
-            <p>Welcome back, Ankit! Here's your performance overview.</p>
+            <p>{greeting} Here's your performance overview.</p>
           </div>
           <button id="add-turf-btn" className="owner-add-btn" onClick={() => navigate('/owner/turfs')}>
             <Plus size={18} /> Add Turf
