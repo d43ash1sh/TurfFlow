@@ -1,17 +1,42 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Bell, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Bell, ChevronRight, Navigation, RefreshCcw } from 'lucide-react';
+import { useGreeting } from '../hooks/useGreeting';
+import { useGeolocation } from '../hooks/useGeolocation';
+import { calculateDistance } from '../utils/distance';
 import BottomNav from '../components/BottomNav';
 import TurfCard from '../components/TurfCard';
+import Hero from '../components/Hero';
 import { turfs, sports } from '../data/mockData';
 import './HomePage.css';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [activeSport, setActiveSport] = useState('All');
+  const greeting = useGreeting();
+  const { location, city, loading: locLoading, error: locError, requestLocation } = useGeolocation();
 
-  const filtered = activeSport === 'All' ? turfs : turfs.filter(t => t.sport === activeSport);
-  const featured = turfs.slice(0, 2);
+  const sortedTurfs = useMemo(() => {
+    let list = [...turfs];
+    
+    // Filter by sport
+    if (activeSport !== 'All') {
+      list = list.filter(t => t.sport === activeSport);
+    }
+
+    // Sort by distance if location is available
+    if (location) {
+      list.sort((a, b) => {
+        const distA = calculateDistance(location.lat, location.lng, a.lat, a.lng);
+        const distB = calculateDistance(location.lat, location.lng, b.lat, b.lng);
+        return distA - distB;
+      });
+    }
+    
+    return list;
+  }, [activeSport, location]);
+
+  const nearestTurfId = location && sortedTurfs.length > 0 ? sortedTurfs[0].id : null;
 
   return (
     <div className="page-wrapper home-page">
@@ -19,12 +44,11 @@ export default function HomePage() {
       <header className="home-header glass-panel">
         <div className="home-header__left">
           <div className="home-header__greeting">
-            <p className="label-bold" style={{ color: 'var(--primary)' }}>Good Evening! 👋</p>
-            <h2 className="home-header__name">Debashish</h2>
+            <p className="label-bold" style={{ color: 'var(--primary)' }}>{greeting}</p>
           </div>
           <div className="home-header__location">
-            <MapPin size={13} />
-            <span>Guwahati, Assam</span>
+            <MapPin size={13} className={locLoading ? 'pulse' : ''} />
+            <span>{locLoading ? 'Detecting location...' : (city || 'Guwahati, Assam')}</span>
           </div>
         </div>
         <button id="home-notification-btn" className="home-header__notif">
@@ -34,6 +58,26 @@ export default function HomePage() {
       </header>
 
       <div className="home-content">
+        {/* Location Discovery Banner */}
+        {!location && (
+          <div className={`location-banner glass-panel ${locError ? 'location-banner--error' : ''}`}>
+            <div className="location-banner__icon">
+              <Navigation size={20} className={locLoading ? 'pulse' : ''} />
+            </div>
+            <div className="location-banner__text">
+              <h4>{locError ? 'Location Error' : 'Find Nearby Turfs'}</h4>
+              <p>{locError || 'Allow location access to see the closest turfs around you.'}</p>
+            </div>
+            <button 
+              className="location-banner__btn" 
+              onClick={requestLocation}
+              disabled={locLoading}
+            >
+              {locLoading ? <RefreshCcw size={16} className="spin" /> : locError ? 'Retry' : 'Enable'}
+            </button>
+          </div>
+        )}
+
         {/* Search Bar */}
         <div className="home-search" onClick={() => navigate('/explore')} id="home-search-bar">
           <Search size={18} className="home-search__icon" />
@@ -41,16 +85,7 @@ export default function HomePage() {
         </div>
 
         {/* Hero Banner */}
-        <div className="home-hero">
-          <div className="home-hero__text">
-            <h1>Book Your Turf<br /><span>Instantly</span></h1>
-            <p>Find, reserve, and play on the best turfs in your city.</p>
-            <button id="home-explore-btn" onClick={() => navigate('/explore')}>
-              Explore Now <ChevronRight size={16} />
-            </button>
-          </div>
-          <div className="home-hero__visual">⚽</div>
-        </div>
+        <Hero />
 
         {/* Sports Filter */}
         <section className="home-section">
@@ -80,9 +115,27 @@ export default function HomePage() {
             </button>
           </div>
           <div className="home-turfs-grid">
-            {filtered.length > 0 ? filtered.map(turf => (
-              <TurfCard key={turf.id} turf={turf} />
-            )) : (
+            {locLoading ? (
+              // Skeletons
+              [1, 2, 3, 4].map(i => (
+                <div key={i} className="turf-skeleton shadow-card">
+                  <div className="turf-skeleton__image shimmer" />
+                  <div className="turf-skeleton__body">
+                    <div className="turf-skeleton__line shimmer" style={{ width: '70%' }} />
+                    <div className="turf-skeleton__line shimmer" style={{ width: '40%' }} />
+                  </div>
+                </div>
+              ))
+            ) : sortedTurfs.length > 0 ? (
+              sortedTurfs.map(turf => (
+                <TurfCard 
+                  key={turf.id} 
+                  turf={turf} 
+                  userLocation={location}
+                  isNearest={turf.id === nearestTurfId}
+                />
+              ))
+            ) : (
               <p style={{ color: 'var(--on-surface-variant)', gridColumn: '1/-1', textAlign: 'center', padding: '32px 0' }}>
                 No turfs found for {activeSport}. Try another sport.
               </p>

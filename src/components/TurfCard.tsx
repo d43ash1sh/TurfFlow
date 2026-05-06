@@ -1,19 +1,33 @@
 import './TurfCard.css';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, Navigation } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Turf } from '../data/mockData';
+import { calculateDistance, formatDistance } from '../utils/distance';
 
 interface TurfCardProps {
   turf: Turf;
+  userLocation?: { lat: number; lng: number } | null;
+  isNearest?: boolean;
 }
 
-export default function TurfCard({ turf }: TurfCardProps) {
+export default function TurfCard({ turf, userLocation, isNearest }: TurfCardProps) {
   const navigate = useNavigate();
+
+  const distance = userLocation 
+    ? calculateDistance(userLocation.lat, userLocation.lng, turf.lat, turf.lng)
+    : null;
+
   return (
     <div className="turf-card shadow-card" onClick={() => navigate(`/turf/${turf.id}`)} id={`turf-card-${turf.id}`}>
       <div className="turf-card__image-wrap">
         <img src={turf.image} alt={turf.name} className="turf-card__image" />
         <span className="turf-card__sport label-bold">{turf.sport}</span>
+        {distance !== null && (
+          <div className={`turf-card__distance-badge ${isNearest ? 'turf-card__distance-badge--nearest' : ''}`}>
+            <Navigation size={10} />
+            <span>{isNearest ? 'Nearest' : formatDistance(distance)}</span>
+          </div>
+        )}
       </div>
       <div className="turf-card__body">
         <h3 className="turf-card__name">{turf.name}</h3>

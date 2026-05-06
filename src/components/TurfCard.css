@@ -31,14 +31,38 @@
 
 .turf-card__sport {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(0, 110, 47, 0.85);
+  top: 12px;
+  right: 12px;
+  background: var(--surface-container-highest);
+  color: var(--on-surface);
+  padding: 4px 10px;
+  border-radius: var(--rounded-full);
+  font-size: 11px;
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--outline-variant);
+}
+
+.turf-card__distance-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
   color: white;
   padding: 4px 10px;
   border-radius: var(--rounded-full);
-  font-size: 10px;
-  backdrop-filter: blur(4px);
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.turf-card__distance-badge--nearest {
+  background: var(--tertiary);
+  color: var(--on-tertiary);
+  border-color: var(--tertiary);
 }
 
 .turf-card__body {

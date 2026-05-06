@@ -11,6 +11,8 @@ export interface Turf {
   amenities: string[];
   description: string;
   ownerId: string;
+  lat: number;
+  lng: number;
 }
 
 export interface TimeSlot {
@@ -57,6 +59,8 @@ export const turfs: Turf[] = [
     amenities: ['Changing Rooms', 'Parking', 'Floodlights', 'Drinking Water', 'First Aid'],
     description: 'Premium synthetic turf ground with international standard FIFA-quality surface. Perfect for 5-a-side and 7-a-side football matches with full floodlighting for evening games.',
     ownerId: 'owner1',
+    lat: 26.1158,
+    lng: 91.7941,
   },
   {
     id: '2',
@@ -71,6 +75,8 @@ export const turfs: Turf[] = [
     amenities: ['Changing Rooms', 'Cafeteria', 'Parking', 'Floodlights'],
     description: 'State-of-the-art cricket practice nets and open ground in the heart of Shillong. Ideal for batting and bowling practice sessions.',
     ownerId: 'owner2',
+    lat: 25.5714,
+    lng: 91.8948,
   },
   {
     id: '3',
@@ -85,6 +91,8 @@ export const turfs: Turf[] = [
     amenities: ['Parking', 'Floodlights', 'Drinking Water'],
     description: 'Budget-friendly turf facility with well-maintained artificial grass. Great for casual matches and weekend tournaments.',
     ownerId: 'owner1',
+    lat: 26.1585,
+    lng: 91.7816,
   },
   {
     id: '4',
@@ -99,6 +107,8 @@ export const turfs: Turf[] = [
     amenities: ['AC Hall', 'Changing Rooms', 'Parking', 'Pro Shop'],
     description: 'Indoor air-conditioned badminton courts with professional wooden flooring. Suitable for both recreational and competitive play.',
     ownerId: 'owner3',
+    lat: 26.1306,
+    lng: 91.8152,
   },
 ];
 
